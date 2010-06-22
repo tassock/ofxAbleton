@@ -3,7 +3,7 @@
 
 #include "ofMain.h"
 #include "ofxOsc.h"
-#include "liveSet.h"
+#include "ofxAbleton.h"
 
 #define HOST "localhost"
 #define PORT 12345

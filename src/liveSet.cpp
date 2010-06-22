@@ -23,6 +23,7 @@ liveSet::liveSet(){
 	
 	cout << "!!!clip_count: " << getClipCount() << endl;
 	cout << "!!!clip_name:  " << getClipByName("1_3")->getName() << endl;
+	getClipByName("1_3")->callFunction("fire");
 	
 }
 
