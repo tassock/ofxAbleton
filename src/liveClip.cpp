@@ -15,7 +15,12 @@ liveClip::liveClip(liveSet* _parent_set, int _live_id, int _clip_slot_id){
 	connection = parent_set->getConnection();
 	live_id = _live_id;
 	clip_slot_id = _clip_slot_id;
+	name = getAttr("name");
 	
-	cout << "liveClip( live_id: " << live_id << ", clip_slot_id: " << clip_slot_id << ")" << endl;
+	cout << "liveClip( live_id: " << live_id << ", name: " << name << ", clip_slot_id: " << clip_slot_id << ")" << endl;
 	parent_set->addClip(this);
+}
+
+string liveClip::getName(){
+	return name;
 }

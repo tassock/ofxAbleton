@@ -11,7 +11,9 @@ public:
 	void setPath();
 	string getAttr(string _property);
 	void setAttr(string _property, string _value);
+	void callFunction(string _function);
 	int getLiveId();
+	int msleep(unsigned long milisec);
 	
 	liveSet * parent_set;
 	liveConnection * connection;

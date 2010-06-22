@@ -22,6 +22,7 @@ public:
 	void getTracks();
 	void addClip(liveClip* clip);
 	int getClipCount();
+	liveClip * getClipByName(string name);
 	
 	liveConnection * connection;
 	liveTrack *master_track;

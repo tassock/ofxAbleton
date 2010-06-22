@@ -22,6 +22,7 @@ liveSet::liveSet(){
 	getTracks();
 	
 	cout << "!!!clip_count: " << getClipCount() << endl;
+	cout << "!!!clip_name:  " << getClipByName("1_3")->getName() << endl;
 	
 }
 
@@ -66,7 +67,20 @@ int liveSet::getClipCount() {
 	for ( int i=0; i<MAX_CLIPS; i++ ) {
 		if (clips[i]) {
 			clip_count += 1;
+			cout << "CLIP: " << clips[i]->getName() << endl;
 		}
 	}
 	return clip_count;
+}
+
+
+//--------------------------------------------------------
+liveClip * liveSet::getClipByName(string name) {
+	for ( int i=0; i<MAX_CLIPS; i++ ) {
+		if (clips[i]) {
+			if (clips[i]->getName() == name) {
+				return clips[i];
+			}
+		}
+	}
 }
