@@ -10,6 +10,7 @@
 #define NUM_TRACKS 5
 #define MAX_CLIPS 200
 
+// Forward declarations
 class liveClip;
 
 class liveSet {
@@ -23,7 +24,11 @@ public:
 	void addClip(liveClip* clip);
 	int getClipCount();
 	liveClip * getClipByName(string name);
+	int getBeat();
+	int getStep();
 	
+	int beat;
+	int step;
 	liveConnection * connection;
 	liveTrack *master_track;
 	liveTrack *tracks[NUM_TRACKS + 1]; // +1 for master track

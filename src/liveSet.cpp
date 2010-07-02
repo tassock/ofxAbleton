@@ -34,7 +34,9 @@ liveConnection * liveSet::getConnection() {
 
 //--------------------------------------------------------
 void liveSet::update(){
-	connection->recieveData();
+	connection->update();
+	beat = connection->getBeat();
+	step = connection->getStep();
 }
 
 
@@ -84,4 +86,15 @@ liveClip * liveSet::getClipByName(string name) {
 			}
 		}
 	}
+}
+
+//--------------------------------------------------------------
+int liveSet::getBeat() {
+	return beat;
+}
+
+
+//--------------------------------------------------------------
+int liveSet::getStep() {
+	return step;
 }
