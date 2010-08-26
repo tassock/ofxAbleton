@@ -21,9 +21,12 @@ liveSet::liveSet(){
 	getMasterTrack();
 	getTracks();
 	
-	cout << "!!!clip_count: " << getClipCount() << endl;
-	cout << "!!!clip_name:  " << getClipByName("1_3")->getName() << endl;
-	getClipByName("1_3")->callFunction("fire");
+	// Set live_id
+	live_id = connection->live_path("goto live_set");
+	
+//	cout << "!!!clip_count: " << getClipCount() << endl;
+//	cout << "!!!clip_name:  " << getClipByName("1_3")->getName() << endl;
+//	getClipByName("1_3")->callFunction("fire");
 	
 }
 
@@ -37,6 +40,21 @@ void liveSet::update(){
 	connection->update();
 	beat = connection->getBeat();
 	step = connection->getStep();
+}
+
+
+//--------------------------------------------------------
+void liveSet::play(){
+	callFunction("play_selection");
+	connection->play();
+}
+
+
+//--------------------------------------------------------
+void liveSet::stop(){
+	cout << "STOP()" << endl;
+	callFunction("stop_all_clips");
+	connection->stop();
 }
 
 

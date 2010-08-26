@@ -17,8 +17,11 @@ liveConnection::liveConnection() {
 	// listen on the given port
 	receiver.setup( RECIEVE_PORT );
 	
-	// set buffers
+	// set defaults
 	int_buffer = 0;
+	playing = false;
+	beat = 0;
+	step = 0;
 	
 }
 
@@ -28,13 +31,29 @@ liveConnection::liveConnection() {
 void liveConnection::update() {
 	
 	// Increment step
-	step ++;
-	if (step == NUM_STEPS) {
-		step = 0;
+	if (playing == true) {
+		step ++;
+		if (step == NUM_STEPS) {
+			step = 0;
+		}
 	}
 	
 	// get messages
 	recieveData();
+}
+
+
+//--------------------------------------------------------
+void liveConnection::play() {
+	playing = true;
+	beat = 0;
+	step = 0;
+}
+
+
+//--------------------------------------------------------
+void liveConnection::stop() {
+	playing = false;
 }
 
 
@@ -57,7 +76,7 @@ void liveConnection::recieveData() {
 //--------------------------------------------------------
 // Set bar beat and step vars
 void liveConnection::handleTransport(int _beat) {
-	if (_beat >= 0 and _beat < NUM_BEATS) {
+	if ( _beat >= 0 and playing == true ) {
 		beat = _beat;
 		step = 0;
 	}

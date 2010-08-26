@@ -17,6 +17,8 @@ public:
 	liveConnection();
 	void recieveData();
 	void update();
+	void play();
+	void stop();
 	void handleTransport(int _beat);
 	int live_path(string arg);
 	void sendMessage(string address, string arg);
@@ -28,6 +30,7 @@ public:
 	ofxOscSender sender;
 	ofxOscReceiver receiver;
 	int int_buffer;
+	bool playing;
 	int beat;
 	int step;
 	
