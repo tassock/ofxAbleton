@@ -12,7 +12,6 @@
 
 liveClipSlot::liveClipSlot(liveSet* _parent_set, int _live_id, int _track_id, int _order, int _track_order){
 	parent_set = _parent_set;
-	connection = parent_set->getConnection();
 	live_id = _live_id;
 	track_id = _track_id;
 	order = _order;
@@ -28,16 +27,16 @@ liveClipSlot::liveClipSlot(liveSet* _parent_set, int _live_id, int _track_id, in
 // get the clip if it exists.
 void liveClipSlot::getClip(){
 	
-	// Weird hackish bs
-	int new_order = order -1;
-	if (new_order == -1) {
-		new_order = 0;
-	}
-	
-	if (has_clip) {
-		string clip_path = "goto live_set tracks " + ofToString(track_order) + " clip_slots " + ofToString(new_order) + " clip";
-		//cout << "-clip_path: " << clip_path << endl;
-		int clip_id = connection->live_path(clip_path);
-		clip = new liveClip(parent_set, clip_id, live_id);
-	}
+//	// Weird hackish bs
+//	int new_order = order -1;
+//	if (new_order == -1) {
+//		new_order = 0;
+//	}
+//	
+//	if (has_clip) {
+//		string clip_path = "goto live_set tracks " + ofToString(track_order) + " clip_slots " + ofToString(new_order) + " clip";
+//		//cout << "-clip_path: " << clip_path << endl;
+//		int clip_id = connection->live_path(clip_path);
+//		clip = new liveClip(parent_set, clip_id, live_id);
+//	}
 }

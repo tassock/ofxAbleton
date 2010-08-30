@@ -12,99 +12,160 @@
 //--------------------------------------------------------
 liveSet::liveSet(){
 	
-	// Clear object arrays
-	for ( int i=0; i<MAX_CLIPS; i++ ) {
-		clips[i] = NULL;
-	}
+	cout << "!!liveSet::liveSet()" << endl;
 	
-	connection = new liveConnection();
-	getMasterTrack();
+	// open an outgoing connection to HOST:PORT
+	sender.setup( HOST, SEND_PORT );
+	
+	// listen on the given port
+	receiver.setup( RECIEVE_PORT );
+	
+	// Set defaults
+	playing = false;
+	beat = 0;
+	step = 0;
+	
+	// Scan for tracks and clips
+	getInfo();
 	getTracks();
+	getClips();
 	
-	// Set live_id
-	live_id = connection->live_path("goto live_set");
+	sleep(1);
+	recieveData();
 	
-//	cout << "!!!clip_count: " << getClipCount() << endl;
-//	cout << "!!!clip_name:  " << getClipByName("1_3")->getName() << endl;
-//	getClipByName("1_3")->callFunction("fire");
+	cout << "!!initialized" << endl;
 	
-}
-
-liveConnection * liveSet::getConnection() {
-	return connection;
 }
 	
 
 //--------------------------------------------------------
 void liveSet::update(){
-	connection->update();
-	beat = connection->getBeat();
-	step = connection->getStep();
+	
+	// Increment step
+	if (playing == true) {
+		step ++; // Need to advance in proportion to tempo
+		if (step == NUM_STEPS) {
+			step = 0;
+			beat ++;
+		}
+	}
+	
+	// get messages
+	recieveData();
+}
+
+
+//--------------------------------------------------------
+// Handle incoming OSC messages
+void liveSet::recieveData() {
+	while( receiver.hasWaitingMessages() ) {
+		ofxOscMessage m;
+		receiver.getNextMessage( &m );
+		
+		// Create liveTrack
+		if ( m.getAddress() == "/live/name/track" ) {
+			int order = m.getArgAsInt32( 0 );
+			string name = m.getArgAsString( 1 );
+			tracks.push_back( new liveTrack(this, order, name) );
+		}
+		
+		// Create liveClip
+		if ( m.getAddress() == "/live/name/clip" ) {
+			int track_order = m.getArgAsInt32( 0 );
+			int order = m.getArgAsInt32( 1 );
+			string name = m.getArgAsString( 2 );
+			clips.push_back( new liveClip(this, track_order, order, name) );
+		}
+		
+		// Handle transport
+		if ( m.getAddress() == "/bar_transport" ) {
+			int _beat = m.getArgAsInt32( 0 );
+			if ( _beat >= 0 and playing == true ) {
+				beat = _beat;
+				step = 0;
+			}
+		}
+		
+		// Recieve tempo
+		if ( m.getAddress() == "/live/tempo" ) {
+			float _tempo = m.getArgAsFloat( 0 );
+			cout << "Tempo: " << _tempo << endl;
+			tempo = tempo;
+		}
+		
+	}
 }
 
 
 //--------------------------------------------------------
 void liveSet::play(){
-	callFunction("play_selection");
-	connection->play();
+	// Set playing flag, reset beat
+	playing = true;
+	// Send message to live
+	ofxOscMessage m;
+	m.setAddress( "/live/play" );
+	sender.sendMessage( m );
 }
 
 
 //--------------------------------------------------------
 void liveSet::stop(){
-	cout << "STOP()" << endl;
-	callFunction("stop_all_clips");
-	connection->stop();
+	playing = false;
+	beat = 0;
+	step = 0;
+	// Send message to live
+//	ofxOscMessage m;
+//	m.setAddress( "/live/stop" );
+//	sender.sendMessage( m );
+	// stop all tracks
+	for ( int i=0; i<clips.size(); i++ ) {
+		liveClip* s_clip = clips[i];
+		ofxOscMessage m;
+		m.setAddress( "/live/stop" );
+		m.addIntArg( s_clip->getTrackOrder() );
+		m.addIntArg( s_clip->getOrder() );
+		sender.sendMessage( m );
+	}
 }
 
 
 //--------------------------------------------------------
-void liveSet::getMasterTrack(){
-	int live_id = connection->live_path("goto live_set master_track");
-	int order = 0;
-	master_track = new liveTrack(this, live_id, order, true);
+void liveSet::getInfo(){
+	
+	// Get tempo
+	ofxOscMessage m;
+	m.setAddress( "/live/tempo" );
+	sender.sendMessage( m );
+	
 }
 
 
 //--------------------------------------------------------
 void liveSet::getTracks(){
-	for ( int i=0; i<NUM_TRACKS; i++ ) {
-		int live_id = connection->live_path("goto live_set tracks " + ofToString(i));
-		tracks[i] = new liveTrack(this, live_id, i, false);
-	}
+	ofxOscMessage m;
+	m.setAddress( "/live/name/track" );
+	sender.sendMessage( m );
 }
 
 
 //--------------------------------------------------------
-void liveSet::addClip(liveClip* clip) {
-	int clip_id = clip->getLiveId();
-	clips[clip_id] = clip;
+void liveSet::getClips(){
+	ofxOscMessage m;
+	m.setAddress( "/live/name/clip" );
+	sender.sendMessage( m );
 }
 
 
 //--------------------------------------------------------
-int liveSet::getClipCount() {
-	int clip_count = 0;
-	for ( int i=0; i<MAX_CLIPS; i++ ) {
-		if (clips[i]) {
-			clip_count += 1;
-			cout << "CLIP: " << clips[i]->getName() << endl;
-		}
-	}
-	return clip_count;
-}
-
-
-//--------------------------------------------------------
-liveClip * liveSet::getClipByName(string name) {
-	for ( int i=0; i<MAX_CLIPS; i++ ) {
-		if (clips[i]) {
-			if (clips[i]->getName() == name) {
-				return clips[i];
-			}
+liveClip * liveSet::getClipByName(string name, int track_order) {
+	for ( int i=0; i<clips.size(); i++ ) {
+		
+		if (clips[i]->getName() == name and clips[i]->getTrackOrder() == track_order) {
+			return clips[i];
 		}
 	}
 }
+
 
 //--------------------------------------------------------------
 int liveSet::getBeat() {
@@ -115,4 +176,10 @@ int liveSet::getBeat() {
 //--------------------------------------------------------------
 int liveSet::getStep() {
 	return step;
+}
+
+
+//--------------------------------------------------------------
+void liveSet::sendMessage(ofxOscMessage message) {
+	sender.sendMessage( message );
 }

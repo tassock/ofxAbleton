@@ -15,8 +15,7 @@ public:
 	int getLiveId();
 	int msleep(unsigned long milisec);
 	
-	liveSet * parent_set;
-	liveConnection * connection;
+	liveSet* parent_set;
 	int live_id;
 	
 };

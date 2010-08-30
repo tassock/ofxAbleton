@@ -4,19 +4,13 @@
 #include "liveObject.h"
 #include "liveClipSlot.h"
 
-#define NUM_CLIP_SLOTS 10
-
 class liveTrack: public liveObject {
 	
 public:
-	liveTrack(liveSet* _parent_set, int _live_id, int _order, bool _is_master);
-	string path();
-	void getClipSlots();
+	liveTrack(liveSet* _parent_set, int _order, string _name);
 	
 	int order;
-	bool is_master;
-	
-	liveClipSlot * clip_slots[NUM_CLIP_SLOTS];
+	string name;
 	
 };
 

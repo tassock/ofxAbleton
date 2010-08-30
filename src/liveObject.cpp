@@ -11,14 +11,14 @@
 #include "liveSet.h"
 
 void liveObject::setPath(){
-	connection->sendMessage("/set_live_object", "id " + ofToString(live_id));
+//	connection->sendMessage("/set_live_object", "id " + ofToString(live_id));
 }
 
 string liveObject::getAttr(string _property){
-	setPath();
-	msleep(50);
-	//cout << "get_attr: " << _property << endl;
-	return connection->sendMessageWithCallback("/live_object", "get " + _property);
+//	setPath();
+//	msleep(50);
+//	//cout << "get_attr: " << _property << endl;
+//	return connection->sendMessageWithCallback("/live_object", "get " + _property);
 }
 
 void liveObject::setAttr(string _property, string _value){
@@ -26,9 +26,9 @@ void liveObject::setAttr(string _property, string _value){
 }
 
 void liveObject::callFunction(string _function) {
-	setPath();
-	msleep(50);
-	connection->sendMessage("/live_object", "call " + _function);
+//	setPath();
+//	msleep(50);
+//	connection->sendMessage("/live_object", "call " + _function);
 }
 
 int liveObject::getLiveId(){

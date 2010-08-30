@@ -19,6 +19,7 @@ public:
 	void update();
 	void play();
 	void stop();
+	void setMode(string _mode);
 	void handleTransport(int _beat);
 	int live_path(string arg);
 	void sendMessage(string address, string arg);
@@ -30,7 +31,9 @@ public:
 	ofxOscSender sender;
 	ofxOscReceiver receiver;
 	int int_buffer;
+	vector<ofxOscMessage> message_que;
 	bool playing;
+	string mode;
 	int beat;
 	int step;
 	

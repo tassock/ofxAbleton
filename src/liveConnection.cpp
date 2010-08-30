@@ -22,7 +22,7 @@ liveConnection::liveConnection() {
 	playing = false;
 	beat = 0;
 	step = 0;
-	
+	mode = "scan"; // "scan", "live"
 }
 
 
@@ -35,6 +35,23 @@ void liveConnection::update() {
 		step ++;
 		if (step == NUM_STEPS) {
 			step = 0;
+		}
+	}
+	
+	// send first message in que
+	if (message_que.size() > 0) {
+		for (int i=0; i<message_que.size(); i++) {
+			ofxOscMessage m = message_que[i];
+			cout << "PNEXT: " << m.getAddress() << " , " << m.getArgAsString( 0 ) << endl;
+		}
+		cout << "SENDING: " << message_que[0].getArgAsString( 0 ) << endl;
+		sender.sendMessage( message_que[ 0 ] );
+		message_que.erase( message_que.begin() );
+		cout << "message_que.size(): " << message_que.size() << endl;
+//		cout << "NEXT: " << message_que[0].getArgAsString( 0 ) << endl;
+		for (int i=0; i<message_que.size(); i++) {
+			ofxOscMessage m = message_que[i];
+			cout << "NEXT: " << m.getAddress() << m.getArgAsString( 0 ) << endl;
 		}
 	}
 	
@@ -54,6 +71,12 @@ void liveConnection::play() {
 //--------------------------------------------------------
 void liveConnection::stop() {
 	playing = false;
+}
+
+
+//--------------------------------------------------------
+void liveConnection::setMode(string _mode) {
+	mode = _mode;
 }
 
 
@@ -108,7 +131,15 @@ void liveConnection::sendMessage(string address, string arg) {
 	ofxOscMessage m;
 	m.setAddress( address );
 	m.addStringArg(arg);
-	sender.sendMessage( m );
+	
+	// send or que depending on mode
+	if (mode == "scan") {
+		sender.sendMessage( m );
+	} else if (mode == "live") {
+		//message_que.insert( message_que.end(), m);
+		message_que.push_back(m);
+		//cout << "message_que.size(): " << message_que.size() << endl;
+	}
 }
 
 

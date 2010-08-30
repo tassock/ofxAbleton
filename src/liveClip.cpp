@@ -10,17 +10,41 @@
 #include "liveClip.h"
 #include "liveSet.h"
 
-liveClip::liveClip(liveSet* _parent_set, int _live_id, int _clip_slot_id){
+//--------------------------------------------------------------
+liveClip::liveClip(liveSet* _parent_set, int _track_order, int _order, string _name){
 	parent_set = _parent_set;
-	connection = parent_set->getConnection();
-	live_id = _live_id;
-	clip_slot_id = _clip_slot_id;
-	name = getAttr("name");
+	track_order = _track_order;
+	order = _order;
+	name = _name;
 	
-	cout << "liveClip( live_id: " << live_id << ", name: " << name << ", clip_slot_id: " << clip_slot_id << ")" << endl;
-	parent_set->addClip(this);
+	cout << "liveClip( track_order: " << track_order << ", order: " << order << ", name: " << name << ")" << endl;
 }
 
+
+//--------------------------------------------------------------
 string liveClip::getName(){
 	return name;
+}
+
+
+//--------------------------------------------------------------
+int liveClip::getTrackOrder(){
+	return track_order;
+}
+
+
+//--------------------------------------------------------------
+int liveClip::getOrder(){
+	return order;
+}
+
+
+//--------------------------------------------------------------
+void liveClip::fire() {
+	// /live/play/clip         (int track, int clip)
+	ofxOscMessage m;
+	m.setAddress( "/live/play/clip" );
+	m.addIntArg(track_order);
+	m.addIntArg(order);
+	parent_set->sendMessage( m );
 }

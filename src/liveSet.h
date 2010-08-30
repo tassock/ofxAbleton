@@ -2,42 +2,47 @@
 #define _LIVE_SET
 
 #include "ofMain.h"
-#include "liveConnection.h"
 #include "liveTrack.h"
 #include "liveClip.h"
 #include "liveClipSlot.h"
 #include "liveObject.h"
+#include "ofxOsc.h"
 
-#define NUM_TRACKS 5
-#define MAX_CLIPS 200
+#define HOST "localhost"
+#define SEND_PORT 9000
+#define RECIEVE_PORT 9001
+#define NUM_STEPS 32
+#define FRAME_RATE 60
 
 // Forward declarations
 class liveClip;
 class liveObject;
 
-//class liveSet {
-class liveSet: public liveObject {
+class liveSet {
+//class liveSet: public liveObject {
 	
 public:
 	liveSet();
-	liveConnection * getConnection();
 	void update();
+	void recieveData();
 	void play();
 	void stop();
-	void getMasterTrack();
+	void getInfo();
 	void getTracks();
-	void addClip(liveClip* clip);
-	int getClipCount();
-	liveClip * getClipByName(string name);
+	void getClips();
+	liveClip * getClipByName(string name, int track_order);
 	int getBeat();
 	int getStep();
+	void sendMessage(ofxOscMessage message);
 	
+	ofxOscSender sender;
+	ofxOscReceiver receiver;
+	bool playing;
+	float tempo;
 	int beat;
 	int step;
-//	liveConnection * connection;
-	liveTrack *master_track;
-	liveTrack *tracks[NUM_TRACKS + 1]; // +1 for master track
-	liveClip * clips[MAX_CLIPS];
+	vector<liveTrack*> tracks;
+	vector<liveClip*> clips;
 
 };
 
