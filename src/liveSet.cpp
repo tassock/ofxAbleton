@@ -12,7 +12,7 @@
 //--------------------------------------------------------
 liveSet::liveSet(){
 	
-	cout << "!!liveSet::liveSet()" << endl;
+	cout << "@ " << endl;
 	
 	// open an outgoing connection to HOST:PORT
 	sender.setup( HOST, SEND_PORT );
@@ -29,6 +29,7 @@ liveSet::liveSet(){
 	getInfo();
 	getTracks();
 	getClips();
+	getDevices();
 	
 	sleep(1);
 	recieveData();
@@ -62,6 +63,8 @@ void liveSet::recieveData() {
 		ofxOscMessage m;
 		receiver.getNextMessage( &m );
 		
+		//cout << "@: " << m.getAddress() << endl;
+		
 		// Create liveTrack
 		if ( m.getAddress() == "/live/name/track" ) {
 			int order = m.getArgAsInt32( 0 );
@@ -75,6 +78,14 @@ void liveSet::recieveData() {
 			int order = m.getArgAsInt32( 1 );
 			string name = m.getArgAsString( 2 );
 			clips.push_back( new liveClip(this, track_order, order, name) );
+		}
+		
+		// Create liveDevice
+		if ( m.getAddress() == "/live/devicelist" ) {
+			int track_order = m.getArgAsInt32( 0 );
+			int order = m.getArgAsInt32( 1 );
+			string name = m.getArgAsString( 2 );
+			devices.push_back( new liveDevice(this, track_order, order, name) );
 		}
 		
 		// Handle transport
@@ -153,6 +164,23 @@ void liveSet::getClips(){
 	ofxOscMessage m;
 	m.setAddress( "/live/name/clip" );
 	sender.sendMessage( m );
+}
+
+
+//--------------------------------------------------------
+// Get devices for each track
+void liveSet::getDevices(){
+	
+	for ( int i=0; i<2; i++ ) {
+		
+		cout << "PIONG" << endl;
+	
+		ofxOscMessage m;
+		m.setAddress( "/live/devicelist" );
+		m.addIntArg( i );
+		sender.sendMessage( m );
+	
+	}
 }
 
 

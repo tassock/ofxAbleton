@@ -4,6 +4,7 @@
 #include "ofMain.h"
 #include "liveTrack.h"
 #include "liveClip.h"
+#include "liveDevice.h"
 #include "liveClipSlot.h"
 #include "liveObject.h"
 #include "ofxOsc.h"
@@ -17,6 +18,7 @@
 // Forward declarations
 class liveClip;
 class liveObject;
+class liveDevice;
 
 class liveSet {
 //class liveSet: public liveObject {
@@ -30,6 +32,7 @@ public:
 	void getInfo();
 	void getTracks();
 	void getClips();
+	void getDevices();
 	liveClip * getClipByName(string name, int track_order);
 	int getBeat();
 	int getStep();
@@ -43,6 +46,7 @@ public:
 	int step;
 	vector<liveTrack*> tracks;
 	vector<liveClip*> clips;
+	vector<liveDevice*> devices;
 
 };
 
