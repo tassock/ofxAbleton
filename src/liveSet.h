@@ -5,6 +5,7 @@
 #include "liveTrack.h"
 #include "liveClip.h"
 #include "liveDevice.h"
+#include "liveParam.h"
 #include "liveClipSlot.h"
 #include "liveObject.h"
 #include "ofxOsc.h"
@@ -19,6 +20,7 @@
 class liveClip;
 class liveObject;
 class liveDevice;
+class liveParam;
 
 class liveSet {
 //class liveSet: public liveObject {
@@ -47,6 +49,7 @@ public:
 	vector<liveTrack*> tracks;
 	vector<liveClip*> clips;
 	vector<liveDevice*> devices;
+	vector<liveParam*> params;
 
 };
 

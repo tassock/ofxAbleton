@@ -63,7 +63,7 @@ void liveSet::recieveData() {
 		ofxOscMessage m;
 		receiver.getNextMessage( &m );
 		
-		//cout << "@: " << m.getAddress() << endl;
+//		cout << "@: " << m.getAddress() << endl;
 		
 		// Create liveTrack
 		if ( m.getAddress() == "/live/name/track" ) {
@@ -86,6 +86,19 @@ void liveSet::recieveData() {
 			int order = m.getArgAsInt32( 1 );
 			string name = m.getArgAsString( 2 );
 			devices.push_back( new liveDevice(this, track_order, order, name) );
+		}
+		
+		// Create liveParam
+		if ( m.getAddress() == "/live/device/allparam" ) {
+			int _track_o   = m.getArgAsInt32(  0 );
+			int _device_o  = m.getArgAsInt32(  1 );
+			for ( int i=0; i<10; i++ ) {
+				int b = i * 3;
+				int _parameter = m.getArgAsInt32(  b + 2 );
+				float _val     = m.getArgAsFloat(  b + 3 );
+				string _name   = m.getArgAsString( b + 4 );
+				params.push_back( new liveParam(this, _track_o, _device_o, _parameter, _val, _name) );
+			}
 		}
 		
 		// Handle transport

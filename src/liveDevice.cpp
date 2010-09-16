@@ -18,6 +18,13 @@ liveDevice::liveDevice(liveSet* _parent_set, int _track_order, int _order, strin
 	name = _name;
 	
 	cout << "liveDevice( track_order: " << track_order << ", order: " << order << ", name: " << name << ")" << endl;
+	
+	// Get params
+	ofxOscMessage m;
+	m.setAddress( "/live/device" );
+	m.addIntArg(track_order);
+	m.addIntArg(order);
+	parent_set->sendMessage( m );
 }
 
 
