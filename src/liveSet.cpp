@@ -36,6 +36,8 @@ liveSet::liveSet(){
 	
 	cout << "!!initialized" << endl;
 	
+	//setCrossfader(0.8);
+	
 }
 	
 
@@ -223,4 +225,13 @@ int liveSet::getStep() {
 //--------------------------------------------------------------
 void liveSet::sendMessage(ofxOscMessage message) {
 	sender.sendMessage( message );
+}
+
+
+//--------------------------------------------------------------
+void liveSet::setCrossfader(float val) {
+	ofxOscMessage m;
+	m.setAddress( "/live/master/crossfader" );
+	m.addFloatArg( (val * 2) - 1 );
+	sender.sendMessage( m );
 }

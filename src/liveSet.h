@@ -39,6 +39,7 @@ public:
 	int getBeat();
 	int getStep();
 	void sendMessage(ofxOscMessage message);
+	void setCrossfader(float val);
 	
 	ofxOscSender sender;
 	ofxOscReceiver receiver;

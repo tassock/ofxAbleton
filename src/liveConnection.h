@@ -5,8 +5,8 @@
 #include "ofxOsc.h"
 
 #define HOST "localhost"
-#define SEND_PORT 7402
-#define RECIEVE_PORT 7403
+//#define SEND_PORT 7402
+//#define RECIEVE_PORT 7403
 #define NUM_STEPS 32
 #define NUM_BEATS 4
 

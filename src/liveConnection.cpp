@@ -12,10 +12,10 @@
 liveConnection::liveConnection() {
 	
 	// open an outgoing connection to HOST:PORT
-	sender.setup( HOST, SEND_PORT );
-	
-	// listen on the given port
-	receiver.setup( RECIEVE_PORT );
+//	sender.setup( HOST, SEND_PORT );
+//	
+//	// listen on the given port
+//	receiver.setup( RECIEVE_PORT );
 	
 	// set defaults
 	int_buffer = 0;
