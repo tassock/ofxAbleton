@@ -43,7 +43,11 @@ int liveParam::getOrder(){
 }
 
 void liveParam::setVal(float _val) {
-	val = _val;
+	if (name == "GainLo") {
+		val = _val * 0.85;
+	} else {
+		val = _val;
+	}
 
 	ofxOscMessage m;
 	m.setAddress( "/live/device" );

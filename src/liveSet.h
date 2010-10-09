@@ -36,8 +36,10 @@ public:
 	void getClips();
 	void getDevices();
 	liveClip * getClipByName(string name, int track_order);
+	liveParam* getParamByName(string name, int track_order);
 	int getBeat();
 	int getStep();
+	bool getPlaying();
 	void sendMessage(ofxOscMessage message);
 	void setCrossfader(float val);
 	

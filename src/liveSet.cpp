@@ -200,11 +200,22 @@ void liveSet::getDevices(){
 
 
 //--------------------------------------------------------
-liveClip * liveSet::getClipByName(string name, int track_order) {
+liveClip* liveSet::getClipByName(string name, int track_order) {
 	for ( int i=0; i<clips.size(); i++ ) {
 		
 		if (clips[i]->getName() == name and clips[i]->getTrackOrder() == track_order) {
 			return clips[i];
+		}
+	}
+}
+
+
+//--------------------------------------------------------
+liveParam* liveSet::getParamByName(string name, int track_order) {
+	for ( int i=0; i<params.size(); i++ ) {
+		
+		if (params[i]->getName() == name and params[i]->getTrackOrder() == track_order) {
+			return params[i];
 		}
 	}
 }
@@ -219,6 +230,12 @@ int liveSet::getBeat() {
 //--------------------------------------------------------------
 int liveSet::getStep() {
 	return step;
+}
+
+
+//--------------------------------------------------------------
+bool liveSet::getPlaying() {
+	return playing;
 }
 
 
